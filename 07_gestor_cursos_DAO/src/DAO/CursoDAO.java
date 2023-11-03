@@ -1,14 +1,18 @@
-package service;
+package DAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mysql.cj.xdevapi.Statement;
 
 import model.Curso;
 
-public class CursoService {
+public class CursoDAO {
 	
 	String cadena = "jdbc:mysql://localhost:3306/formacion";
 	String user = "root", pwd = "root";
@@ -40,5 +44,24 @@ public class CursoService {
 			ex.printStackTrace(); 
 			return false;
 		}
+	}
+	
+	public List<Curso> cursos(){
+		List<Curso> cursos = new ArrayList<Curso>();
+		try (Connection con = DriverManager.getConnection(cadena, user, pwd);) {
+			String sql = "select * from cursos";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				cursos.add(new Curso(rs.getInt("idCurso"),
+									 rs.getString("curso"),
+									 rs.getInt("duracion"),
+									 rs.getDouble("precio"),
+									 null));					// Lista de alumnos nula
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace(); 
+		}
+		return cursos;
 	}
 }

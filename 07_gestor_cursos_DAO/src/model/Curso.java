@@ -15,4 +15,9 @@ public class Curso {
 	private int duracion;
 	private double precio;
 	private List<Alumno> alumnos;
+	
+	@Override
+	public String toString() {
+		return curso;
+	}
 }

@@ -5,57 +5,41 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import model.Alumno;
-import model.Curso;
 
 public class AlumnoService {
 	
-	String cadena = "jdbc:mysql://localhost:3386/cursos";
+	String cadena = "jdbc:mysql://localhost:3306/formacion";
 	String user = "root", pwd = "root";
 	
-	public boolean actualizarDatos(List<Curso> cursos) {
-		
+	public boolean existeAlumo(String dni) {
 		try (Connection con = DriverManager.getConnection(cadena, user, pwd);) {
-			String sqlCurso = "select * from cursos where IdCurso = ?";
-			PreparedStatement psCurso = con.prepareStatement(sqlCurso);
-			psCurso.setInt(1, curso.getIdCurso());
-			ResultSet rsCurso = psCurso.executeQuery();
-			
-			for (Curso curso : cursos) {
-				if (!(rsCurso.next())) {
-					grabarCurso(curso);
-
-					for (Alumno alumno:curso.getAlumnos()) {
-						String sqlAlumno = "select * from alumnos where dni = ?";
-						PreparedStatement psAlumno = con.prepareStatement(sqlAlumno);
-						psAlumno.setString(1, alumno.getDni());
-						ResultSet rsAlumno = psAlumno.executeQuery();
-						if (!(rsAlumno.next())) {
-							grabarAlumno(alumno);
-						}			
-					}
-				}
-			}
-			
+			String sql = "select * from alumnos where dni = ?";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, dni);
+			ResultSet rs = ps.executeQuery();
+			return rs.next();
 		} catch (SQLException ex) {
-				ex.printStackTrace(); 
-				return false;
-		}		
-		return false;
+			ex.printStackTrace(); 
+			return false;
+		}
 	}
 	
-	public void grabarCurso(Curso curso) {
-		String sql = "insert into cursos values (?,?,?,?)"		
+	public boolean guardarAlumno(Alumno alumno) {
+		try (Connection con = DriverManager.getConnection(cadena, user, pwd);) {
+			String sql = "insert into alumnos (dni, nombre, edad, nota, curso) values (?,?,?,?,?)";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, alumno.getDni());
+			ps.setString(2, alumno.getNombre());
+			ps.setInt(3, alumno.getEdad());
+			ps.setDouble(4, alumno.getNota());
+			ps.setInt(5, alumno.getCurso());
+			ps.execute();
+			return true;
+		} catch (SQLException ex) {
+			ex.printStackTrace(); 
+			return false;
+		}
 	}
-	
-	public boolean grabarAlumno(Alumno alumno) {
-		return false;		
-	}
-		
-	public void consulta() {
-		
-	}
-
 }
