@@ -11,8 +11,9 @@ import java.util.List;
 
 import model.Curso;
 
-public class CursoDAO {
+public class CursoDAOImpl implements CursoDAO {
 	
+	@Override
 	public boolean existeCurso(int idCurso) {
 		try (Connection con = getConnection()) {
 			String sql = "select * from cursos where idCurso = ?";
@@ -26,6 +27,7 @@ public class CursoDAO {
 		}
 	}
 	
+	@Override
 	public boolean guardarCurso(Curso curso) {
 		try (Connection con = getConnection()) {
 			String sql = "insert into cursos (idCurso, curso, duracion, precio) values (?,?,?,?)";
@@ -42,6 +44,7 @@ public class CursoDAO {
 		}
 	}
 	
+	@Override
 	public List<Curso> cursos(){
 		List<Curso> cursos = new ArrayList<Curso>();
 		try (Connection con = getConnection()) {

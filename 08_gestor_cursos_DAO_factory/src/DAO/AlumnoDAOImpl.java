@@ -11,7 +11,7 @@ import java.util.List;
 
 import model.Alumno;
 
-public class AlumnoDAO {
+public class AlumnoDAOImpl implements AlumnoDAO {
 
 	/* VERSION PREVIA
 	-----------------
@@ -22,6 +22,7 @@ public class AlumnoDAO {
 	Y para evitar tener que poner siempre el nombre de la clase al invocar a ese método se hace
 	el import static de la misma. */
 
+	@Override
 	public boolean existeAlumo(String dni) {
 		try (Connection con = getConnection()) {
 			String sql = "select * from alumnos where dni = ?";
@@ -35,6 +36,7 @@ public class AlumnoDAO {
 		}
 	}
 	
+	@Override
 	public boolean guardarAlumno(Alumno alumno) {
 		try (Connection con = getConnection()) {
 			String sql = "insert into alumnos (dni, nombre, edad, nota, curso) values (?,?,?,?,?)";
@@ -54,6 +56,7 @@ public class AlumnoDAO {
 	
 	// Listado de TODOS los alumnos
 	// ----------------------------
+	@Override
 	public List<Alumno> alumnos(){
 		List<Alumno> alumnos = new ArrayList<Alumno>();
 		try (Connection con = getConnection()) {
@@ -74,6 +77,7 @@ public class AlumnoDAO {
 	
 	// SOBRECARGADO: listado de alumnos por curso
 	// ------------------------------------------
+	@Override
 	public List<Alumno> alumnos(int curso){
 		List<Alumno> alumnos = new ArrayList<Alumno>();
 		try (Connection con = getConnection()) {
@@ -93,6 +97,7 @@ public class AlumnoDAO {
 		return alumnos;
 	}
 	
+	@Override
 	public boolean borrarAlumno(String dni) {
 		try (Connection con = getConnection()) {
 			PreparedStatement ps = con.prepareStatement("delete from alumnos where dni = ?");

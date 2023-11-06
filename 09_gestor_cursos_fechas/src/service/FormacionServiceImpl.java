@@ -1,19 +1,18 @@
 package service;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import DAO.AlumnoDAO;
-import DAO.CursoDAO;
 import DAO.CursosJsonDAO;
 import model.Alumno;
 import model.Curso;
 
-public class FormacionService {
+public class FormacionServiceImpl implements FormacionService {
+	@Override
 	public void actualizarDatos() {
-		var as = new AlumnoDAO();
-		var cs = new CursoDAO();
+		var as = DAOFactory.getAlumnoDAO();
+		var cs = DAOFactory.getCursoDAO();
 		var jsonDAO = new CursosJsonDAO();
-		var alumnoDAO = new AlumnoDAO();
 		
 		jsonDAO.getCursos()									// Stream<Curso>
 			.forEach (c -> {								// Recorremos cursos
@@ -30,21 +29,30 @@ public class FormacionService {
 			});
 	}
 	
+	@Override
 	public List<Curso> listadoCursos(){
-		var cursoDAO = new CursoDAO();
-		return cursoDAO.cursos();				
+		var cs = DAOFactory.getCursoDAO();
+		return cs.cursos();				
+	}
+
+	@Override
+	public List<Curso> listadoCursos(LocalDate fechaInicio, LocalDate fechaFin){
+		var cs = DAOFactory.getCursoDAO();
+		return cs.cursos(fechaInicio, fechaFin);				
 	}
 	
+	@Override
 	public List<Alumno> listadoAlumnos(int idCurso){		// idCurso = 0  => todos los alumnos
-		var alumnosDAO = new AlumnoDAO();
-		return idCurso == 0 ? alumnosDAO.alumnos() : alumnosDAO.alumnos(idCurso);   
+		var as = DAOFactory.getAlumnoDAO();
+		return idCurso == 0 ? as.alumnos() : as.alumnos(idCurso);   
 	}
 	
+	@Override
 	public boolean borrarAlumno(String dni) {
-		var alumnosDAO = new AlumnoDAO();
-		if (!alumnosDAO.existeAlumo(dni)) {					// Si el alumno no existe...
+		var as = DAOFactory.getAlumnoDAO();
+		if (!as.existeAlumo(dni)) {					// Si el alumno no existe...
 			return false;
 		}
-		return alumnosDAO.borrarAlumno(dni);
+		return as.borrarAlumno(dni);
 	}
 }
