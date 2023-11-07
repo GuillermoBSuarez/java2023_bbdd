@@ -73,7 +73,7 @@ public class CursoDAOImpl implements CursoDAO {
 	public List<Curso> cursos(LocalDate fechaInicio, LocalDate fechaFin){
 		List<Curso> cursos = new ArrayList<Curso>();
 		try (Connection con = getConnection()) {
-			String sql = "select * from cursos where fechaInicio between '?' and '?'";
+			String sql = "select * from cursos where fechaInicio between ? and ?";
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setDate(1, Date.valueOf(fechaInicio));
 			ps.setDate(2, Date.valueOf(fechaFin));
