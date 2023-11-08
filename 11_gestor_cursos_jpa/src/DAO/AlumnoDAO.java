@@ -20,4 +20,6 @@ public interface AlumnoDAO {
 
 	boolean borrarAlumno(String dni);
 
+	boolean guardarAlumnos(List<Alumno> alumnos);
+
 }

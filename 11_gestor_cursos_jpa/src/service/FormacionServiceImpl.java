@@ -21,7 +21,7 @@ public class FormacionServiceImpl implements FormacionService {
 				}
 				c.getAlumnos().								// Cogemos la List<Alumnos> que es el último campo de Cursos en el json
 					forEach( a -> {							// Recorremos alumnos
-						if ( !as.existeAlumo(a.getDni())) {
+						if ( !as.existeAlumno(a.getDni())) {
 							a.setCurso (c.getIdCurso());	// Añadimos el FK del curso, que no está en el json
 							as.guardarAlumno(a);
 						}
@@ -58,7 +58,7 @@ public class FormacionServiceImpl implements FormacionService {
 	@Override
 	public boolean borrarAlumno(String dni) {
 		var as = DAOFactory.getAlumnoDAO();
-		if (!as.existeAlumo(dni)) {					// Si el alumno no existe...
+		if (!as.existeAlumno(dni)) {					// Si el alumno no existe...
 			return false;
 		}
 		return as.borrarAlumno(dni);
